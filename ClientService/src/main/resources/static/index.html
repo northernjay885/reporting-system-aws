@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Report Management</title>
+    <link href="webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <script src="webjars/jquery/jquery.min.js"></script>
+    <script src="webjars/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/app.js"></script>
+</head>
+<body>
+<noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being
+    enabled. Please enable
+    Javascript and reload this page!</h2></noscript>
+
+<div id="main-content" class="container">
+    <div class="row">
+        <div class="col-md-10">
+            <button id="loadAllBtn" class="btn btn-success loat-right ml-1" type="submit">Refresh All Data</button>
+            <button id="generateBtn" class="btn btn-info float-right ml-1" type="submit">Generate Report</button>
+        </div>
+    </div>
+    <div class="row">
+        <table class="table table-striped">
+            <thead><td>#</td><td>Report Submitter</td><td>Description</td><td>Created Time</td><td>PDF Report</td><td>Excel Report</td><td>Actions</td></thead>
+            <tbody id="report_list_body"></tbody>
+        </table>
+    </div>
+</div>
+
+
+<div class="modal fade" id="create_report_model" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create new report</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label>Input Data: (Json)</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                       <textarea id="inputData" rows="10">
+{
+ "description":"",
+ "headers":[],
+ "data":[],
+ "submitter":""
+}
+                       </textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        Example:(copy this to above)<p class="p-3 font-weight-bold">
+                        { <br>&nbsp;"description":"Student Math Course Report", <br>&nbsp;"headers":["Student #","Name","Class","Score"], <br>&nbsp;"data":[ <br>&nbsp;&nbsp;["s-008","Sarah","Class-A","B"], <br>&nbsp;&nbsp;["s-009","Thomas","Class-A","B-"], <br>&nbsp;&nbsp;["s-010","Joseph","Class-B","A-"], <br>&nbsp;&nbsp;["s-011","Charles","Class-C","A123123"] <br>&nbsp;], <br>&nbsp;"submitter":"Mrs. York" <br>}
+                    </p>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary pull-right" id="create_report">Create Using Sync API</button>
+                <button type="button" class="btn btn-primary pull-right" id="create_report_async">Create Using Async API</button>
+                <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+

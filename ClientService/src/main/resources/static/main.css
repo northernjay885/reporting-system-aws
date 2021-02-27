@@ -1,0 +1,20 @@
+html, body {
+    background-color: #ffffff;
+    height: 100%;
+}
+#main-content {
+    max-width: 1280px;
+    padding: 2em 3em;
+    background-color: white;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+}
+
+.row {
+    margin-top: 1rem;
+}
+
+textarea {
+    width: 100%;
+    resize: vertical;
+}

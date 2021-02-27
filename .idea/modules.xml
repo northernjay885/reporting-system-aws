@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ClientService/ClientService.iml" filepath="$PROJECT_DIR$/ClientService/ClientService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ExcelService/ExcelService.iml" filepath="$PROJECT_DIR$/ExcelService/ExcelService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PDFService/PDFService.iml" filepath="$PROJECT_DIR$/PDFService/PDFService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/reporting_system_aws.iml" filepath="$PROJECT_DIR$/reporting_system_aws.iml" />
+    </modules>
+  </component>
+</project>
