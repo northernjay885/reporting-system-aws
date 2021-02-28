@@ -48,7 +48,7 @@ public class ExcelRequestQueueListener {
         log.info("Replied back: {}", response);
     }
 
-    @SqsListener("Excel_Request_Queue")
+    @SqsListener("excel_task_queue")
     public void fanoutQueueListener(ExcelSNSRequest request) {
         log.info("Get fanout request: {}", request);
         queueListener(request.getExcelRequest());

@@ -48,7 +48,7 @@ public class PDFRequestQueueListener {
         log.info("Replied back: {}", response);
     }
 
-    @SqsListener("PDF_Request_Queue")
+    @SqsListener("pdf_task_queue")
     public void fanoutQueueListener(PDFSNSRequest request) {
         log.info("Get fanout request: {}", request);
         queueListener(request.getPdfRequest());
