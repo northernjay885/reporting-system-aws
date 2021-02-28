@@ -24,7 +24,7 @@ public class EmailServiceImpl implements EmailService{
         Email email = new Email();
         email.setTo(to);
         email.setFrom("do_not_reply@antra.com");
-        email.setSubject("We did it!");
+        email.setSubject("Yes, we can!");
         email.setBody(emailBody);
         email.setToken("12345");
         send(email);
@@ -32,7 +32,7 @@ public class EmailServiceImpl implements EmailService{
     private void send(Object message) {
         queueMessagingTemplate.convertAndSend("email_queue", message);
         log.info("Email sent: {}", message);
-        String s = "{ \"token\": \"12345\", \"to\": \"youremail@gmail.com\", \"subject\": \"This is a test\", \"body\": \"<html>Hi <b>Dawei!</b></html>\" }";
+        // String s = "{ \"token\": \"12345\", \"to\": \"lrj193927@gmail.com\", \"subject\": \"This is a test\", \"body\": \"<html>Hi <b>Dawei!</b></html>\" }";
     }
 
 }
