@@ -21,20 +21,20 @@ public class TestSNS {
     @Test
     public void testReportService() {
         ReportRequest request = new ReportRequest();
-        request.setSubmitter("Dawei_test");
+        request.setSubmitter("NorthernJay_test");
         request.setDescription("This is just a test");
         request.setHeaders(List.of("Id","Name","Age"));
         request.setData(List.of(List.of("1","Dd","23"),List.of("2","AJ","32")));
-   //     reportService.generateReports(request);
+        // reportService.generateReportsSync(request);
     }
     @Test
     public void testSNSSend() {
         ReportRequest request = new ReportRequest();
-        request.setSubmitter("Dawei_test");
+        request.setSubmitter("NorthernJay_test");
         request.setDescription("This is just a test");
         request.setHeaders(List.of("Id","Name","Age"));
         request.setData(List.of(List.of("1","Dd","23"),List.of("2","AJ","32")));
 
-  //      snsService.generateReport(request);
+        snsService.sendReportNotification(request);
     }
 }
