@@ -1,10 +1,7 @@
 package com.antra.report.client.service;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.antra.report.client.entity.ExcelReportEntity;
-import com.antra.report.client.entity.PDFReportEntity;
-import com.antra.report.client.entity.ReportRequestEntity;
-import com.antra.report.client.entity.ReportStatus;
+import com.antra.report.client.entity.*;
 import com.antra.report.client.exception.RequestNotFoundException;
 import com.antra.report.client.pojo.EmailType;
 import com.antra.report.client.pojo.FileType;
@@ -24,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -119,36 +117,33 @@ public class ReportServiceImpl implements ReportService {
     @Override
 //    @Transactional // why this? email could fail
     public void updateAsyncPDFReport(SqsResponse response) {
-        ReportRequestEntity entity = reportRequestRepo.findById(response.getReqId()).orElseThrow(RequestNotFoundException::new);
-        var pdfReport = entity.getPdfReport();
-        pdfReport.setUpdatedTime(LocalDateTime.now());
-        if (response.isFailed()) {
-            pdfReport.setStatus(ReportStatus.FAILED);
-        } else{
-            pdfReport.setStatus(ReportStatus.COMPLETED);
-            pdfReport.setFileId(response.getFileId());
-            pdfReport.setFileLocation(response.getFileLocation());
-            pdfReport.setFileSize(response.getFileSize());
-        }
-        entity.setUpdatedTime(LocalDateTime.now());
-        reportRequestRepo.save(entity);
-        String to = "lrj193927@gmail.com";
-        emailService.sendEmail(to, EmailType.SUCCESS, entity.getSubmitter());
+        setReportByType(response, "PDF");
     }
 
     @Override
 //    @Transactional
     public void updateAsyncExcelReport(SqsResponse response) {
+        setReportByType(response, "EXCEL");
+    }
+
+    private void setReportByType(SqsResponse response, String type) {
         ReportRequestEntity entity = reportRequestRepo.findById(response.getReqId()).orElseThrow(RequestNotFoundException::new);
-        var excelReport = entity.getExcelReport();
-        excelReport.setUpdatedTime(LocalDateTime.now());
+        BaseReportEntity report;
+        if (type.equals("EXCEL")) {
+            report = entity.getExcelReport();
+        } else if(type.equals("PDF")) {
+            report = entity.getPdfReport();
+        } else {
+            throw new NoSuchElementException("the report type does not exist!");
+        }
+        report.setUpdatedTime(LocalDateTime.now());
         if (response.isFailed()) {
-            excelReport.setStatus(ReportStatus.FAILED);
+            report.setStatus(ReportStatus.FAILED);
         } else{
-            excelReport.setStatus(ReportStatus.COMPLETED);
-            excelReport.setFileId(response.getFileId());
-            excelReport.setFileLocation(response.getFileLocation());
-            excelReport.setFileSize(response.getFileSize());
+            report.setStatus(ReportStatus.COMPLETED);
+            report.setFileId(response.getFileId());
+            report.setFileLocation(response.getFileLocation());
+            report.setFileSize(response.getFileSize());
         }
         entity.setUpdatedTime(LocalDateTime.now());
         reportRequestRepo.save(entity);
@@ -159,7 +154,9 @@ public class ReportServiceImpl implements ReportService {
     @Override
     @Transactional(readOnly = true)
     public List<ReportVO> getReportList() {
-        return reportRequestRepo.findAll().stream().map(ReportVO::new).collect(Collectors.toList());
+        return reportRequestRepo.findAll().stream()
+                .map(ReportVO::new)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -177,5 +174,10 @@ public class ReportServiceImpl implements ReportService {
             return s3Client.getObject(bucket, key).getObjectContent();
         }
         return null;
+    }
+
+    @Override
+    public void deleteReportByReqId(String reqId) {
+
     }
 }

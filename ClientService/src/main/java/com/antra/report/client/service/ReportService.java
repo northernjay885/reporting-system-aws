@@ -20,4 +20,6 @@ public interface ReportService {
     List<ReportVO> getReportList();
 
     InputStream getFileBodyByReqId(String reqId, FileType type);
+
+    void deleteReportByReqId(String reqId);
 }
