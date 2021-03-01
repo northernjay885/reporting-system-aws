@@ -19,7 +19,7 @@ function loadAll() {
                     ).append(
                         $('<td>').append(report.excelReportStatus)
                     ).append(
-                        "<td>" + actionLinks(report.pdfReportStatus, report.excelReportStatus, report.id) + "</td>"
+                        "<td>" + actionList(report.pdfReportStatus, report.excelReportStatus, report.id) + "</td>"
                     )
                 );
             });
@@ -79,10 +79,37 @@ function showDelete(reqId){
         });
     }
 }
+
+function myFunction() {
+    console.log("I'm in myFunction");
+    document.getElementById("myDropdown").classList.toggle("show");
+}
+
+// Close the dropdown if the user clicks outside of it
+window.onclick = function(event) {
+    if (!event.target.matches('.dropbtn')) {
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        var i;
+        for (i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains('show')) {
+                openDropdown.classList.remove('show');
+            }
+        }
+    }
+}
+
+function actionList(ps, es, id) {
+    return "<button onclick='myFunction()' class='dropbtn'>Actions</button>" +
+            "<div id='myDropdown' class='dropdown-content'>" +
+                actionLinks(ps, es, id) +
+            "</div>";
+}
+
 function actionLinks(ps, es, id) {
     return (ps === 'COMPLETED'?"<a onclick='downloadPDF(\""+id+"\")' href='#'>Download PDF</a>":"")
-        + (es === 'COMPLETED'?"<a onclick='downloadExcel(\""+id+"\")' style='margin-left: 1em' href='#'>Download Excel</a>":"")
-        +"<a onclick='showDelete(\""+id+"\")' style='margin-left: 1em' href='#'>Delete</a>";
+         + (es === 'COMPLETED'?"<a onclick='downloadExcel(\""+id+"\")' href='#'>Download Excel</a>":"")
+         + "<a onclick='showDelete(\""+id+"\")' href='#'>Delete</a>";
 }
 function validateInput(){
     try {
