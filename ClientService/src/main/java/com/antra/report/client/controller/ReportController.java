@@ -77,12 +77,17 @@ public class ReportController {
     }
 
     @DeleteMapping("/report/content/{reqId}")
-    public void deleteReport(@PathVariable String reqId) {
+    public ResponseEntity<String> deleteReport(@PathVariable String reqId) {
         log.info("Got request to delete report - reqId: {}", reqId);
         reportService.deleteReportByReqId(reqId);
+        return new ResponseEntity<>(reqId, HttpStatus.OK);
     }
 
-//   @PutMapping
+   @PutMapping("/report/content/{reqId}")
+   public void uploadReport(@PathVariable String reqId, @PathVariable String type) {
+        log.info("Got request to uploadReport - reqId: {}, type: {}", reqId, type);
+        reportService.updateReportDetails(reqId);
+   }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<GeneralResponse> handleValidationException(MethodArgumentNotValidException e) {

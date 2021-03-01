@@ -192,4 +192,10 @@ public class ReportServiceImpl implements ReportService {
         }
         reportRequestRepo.deleteById(reqId);
     }
+
+    @Override
+    public void updateReportDetails(String reqId) {
+        ReportRequestEntity entity = reportRequestRepo.findById(reqId).orElseThrow(RequestNotFoundException::new);
+        //it seems the update feature is not necessary.
+    }
 }

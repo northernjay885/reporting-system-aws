@@ -80,7 +80,7 @@ function showDelete(reqId){
     }
 }
 
-function myFunction() {
+function toggleAction() {
     console.log("I'm in myFunction");
     document.getElementById("myDropdown").classList.toggle("show");
 }
@@ -100,16 +100,22 @@ window.onclick = function(event) {
 }
 
 function actionList(ps, es, id) {
-    return "<button onclick='myFunction()' class='dropbtn'>Actions</button>" +
+    return "<button onclick='toggleAction()' class='dropbtn'>Actions</button>" +
             "<div id='myDropdown' class='dropdown-content'>" +
                 actionLinks(ps, es, id) +
             "</div>";
 }
 
+function updateInfo(reqId) {
+
+}
+
+
 function actionLinks(ps, es, id) {
-    return (ps === 'COMPLETED'?"<a onclick='downloadPDF(\""+id+"\")' href='#'>Download PDF</a>":"")
-         + (es === 'COMPLETED'?"<a onclick='downloadExcel(\""+id+"\")' href='#'>Download Excel</a>":"")
-         + "<a onclick='showDelete(\""+id+"\")' href='#'>Delete</a>";
+    return (ps === 'COMPLETED'?"<a onclick='downloadPDF(\""+id+"\")' href='#'>Download PDF</a>":"") +
+           (es === 'COMPLETED'?"<a onclick='downloadExcel(\""+id+"\")' href='#'>Download Excel</a>":"") +
+           "<a onclick='showDelete(\""+id+"\")' href='#'>Delete</a>" +
+           "<a onclick='updateInfo(\""+id+"\")' href='#'>Update</a>";
 }
 function validateInput(){
     try {
