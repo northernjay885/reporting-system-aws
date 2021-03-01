@@ -115,23 +115,21 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-//    @Transactional // why this? email could fail
     public void updateAsyncPDFReport(SqsResponse response) {
-        setReportByType(response, "PDF");
+        setReportByType(response, FileType.PDF);
     }
 
     @Override
-//    @Transactional
     public void updateAsyncExcelReport(SqsResponse response) {
-        setReportByType(response, "EXCEL");
+        setReportByType(response, FileType.EXCEL);
     }
 
-    private void setReportByType(SqsResponse response, String type) {
+    private void setReportByType(SqsResponse response, FileType type) {
         ReportRequestEntity entity = reportRequestRepo.findById(response.getReqId()).orElseThrow(RequestNotFoundException::new);
         BaseReportEntity report;
-        if (type.equals("EXCEL")) {
+        if (type == FileType.EXCEL) {
             report = entity.getExcelReport();
-        } else if(type.equals("PDF")) {
+        } else if(type == FileType.PDF) {
             report = entity.getPdfReport();
         } else {
             throw new NoSuchElementException("the report type does not exist!");
@@ -177,7 +175,21 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
+    @Transactional
     public void deleteReportByReqId(String reqId) {
-
+        ReportRequestEntity entity = reportRequestRepo.findById(reqId).orElseThrow(RequestNotFoundException::new);
+        FileType[] types = new FileType[] {FileType.EXCEL, FileType.PDF};
+        for (FileType type : types) {
+            String fileLocation;
+            if (type == FileType.PDF) {
+                fileLocation = entity.getPdfReport().getFileLocation();
+            } else {
+                fileLocation = entity.getExcelReport().getFileLocation();
+            }
+            String bucket = fileLocation.split("/")[0];
+            String key = fileLocation.split("/")[1];
+            s3Client.deleteObject(bucket, key);
+        }
+        reportRequestRepo.deleteById(reqId);
     }
 }

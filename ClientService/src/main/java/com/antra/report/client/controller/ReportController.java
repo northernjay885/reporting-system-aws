@@ -76,10 +76,10 @@ public class ReportController {
         log.debug("Downloaded File:{}", reqId);
     }
 
-    @DeleteMapping("/report/{reqId}")
-    public String deleteReport(@PathVariable String reqId) {
+    @DeleteMapping("/report/content/{reqId}")
+    public void deleteReport(@PathVariable String reqId) {
+        log.info("Got request to delete report - reqId: {}", reqId);
         reportService.deleteReportByReqId(reqId);
-        return "redirect:/";
     }
 
 //   @PutMapping

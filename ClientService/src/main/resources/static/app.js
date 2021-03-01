@@ -66,7 +66,17 @@ function downloadFile(urlToSend) {
 }
 function showDelete(reqId){
     if(confirm("Are you sure to delete report?")){
-        //alert('Not implemented');
+        $.ajax({
+            type : "DELETE",
+            url : "/report/content/"+ reqId,
+            success: function (result) {
+                console.log(result);
+                window.location = '/'; // redirect
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        });
     }
 }
 function actionLinks(ps, es, id) {
