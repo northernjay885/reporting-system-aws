@@ -29,7 +29,7 @@ public class SwaggerConfig {
         ApiInfo apiInfo=new ApiInfo("Excel Generation API",
                 "API methods", "0.1",
                 "Terms of Service",
-                new Contact("Antra Inc","http://www.antra.com","dawei.zhuang@antra.com"),
+                new Contact("Antra Inc","http://www.antra.com","lrj193927@gmail.com"),
                 "MIT", "", Collections.EMPTY_LIST);
 
         return apiInfo;

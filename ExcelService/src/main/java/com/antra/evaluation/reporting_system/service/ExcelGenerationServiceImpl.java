@@ -29,25 +29,6 @@ import java.util.List;
 @Service
 public class ExcelGenerationServiceImpl implements ExcelGenerationService {
 
-    private void validateDate(ExcelData data) {
-        if (data.getSheets().size() < 1) {
-            throw new RuntimeException("Excel Data Error: no sheet is defined");
-        }
-        for (ExcelDataSheet sheet : data.getSheets()) {
-            if (StringUtils.isEmpty(sheet.getTitle())) {
-                throw new RuntimeException("Excel Data Error: sheet title is missing");
-            }
-            if(sheet.getHeaders() != null) {
-                int columns = sheet.getHeaders().size();
-                for (List<Object> dataRow : sheet.getDataRows()) {
-                    if (dataRow.size() != columns) {
-                        throw new RuntimeException("Excel Data Error: sheet data has difference length than header number");
-                    }
-                }
-            }
-        }
-    }
-
     @Override
     public File generateExcelReport(ExcelData data) throws IOException {
         validateDate(data);
@@ -85,12 +66,6 @@ public class ExcelGenerationServiceImpl implements ExcelGenerationService {
                 var eachRow = rowData.get(i);
                 for (int j = 0; j < eachRow.size(); j++) {
                     Cell cell = row.createCell(j);
-//                    switch (headersData.get(j).getType()) {
-//                        case STRING:cell.setCellValue(String.valueOf(eachRow.get(j))); cell.setCellType(CellType.STRING);break;
-//                        case NUMBER: cell.setCellValue(eachRow.get(j));cell.setCellType(CellType.NUMERIC);break;
-//                        case DATE:cell.setCellValue((Date)eachRow.get(j));break;
-//                        default:cell.setCellValue(String.valueOf(eachRow.get(j)));break;
-//                    }
                     cell.setCellValue(String.valueOf(eachRow.get(j)));
                     cell.setCellStyle(style);
                 }
@@ -103,7 +78,7 @@ public class ExcelGenerationServiceImpl implements ExcelGenerationService {
 
         File currDir = new File(".");
         String path = currDir.getAbsolutePath();
-        String fileLocation = path.substring(0, path.length() - 1) + data.getFileId() +".xlsx";
+        String fileLocation = path.substring(0, path.length() - 1) + data.getFileId() + ".xlsx";
 
         FileOutputStream outputStream = new FileOutputStream(fileLocation);
         workbook.write(outputStream);
@@ -112,7 +87,27 @@ public class ExcelGenerationServiceImpl implements ExcelGenerationService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return new File(fileLocation);
+    }
+
+    private void validateDate(ExcelData data) {
+        if (data.getSheets().size() < 1) {
+            throw new RuntimeException("Excel Data Error: no sheet is defined");
+        }
+        for (ExcelDataSheet sheet : data.getSheets()) {
+            if (StringUtils.isEmpty(sheet.getTitle())) {
+                throw new RuntimeException("Excel Data Error: sheet title is missing");
+            }
+            if(sheet.getHeaders() != null) {
+                int columns = sheet.getHeaders().size();
+                for (List<Object> dataRow : sheet.getDataRows()) {
+                    if (dataRow.size() != columns) {
+                        throw new RuntimeException("Excel Data Error: sheet data have different length than header number");
+                    }
+                }
+            }
+        }
     }
 
 }

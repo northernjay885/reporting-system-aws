@@ -1,5 +1,6 @@
 package com.antra.evaluation.reporting_system.service;
 
+import com.amazonaws.services.s3.AmazonS3;
 import com.antra.evaluation.reporting_system.exception.FileGenerationException;
 import com.antra.evaluation.reporting_system.pojo.api.ExcelRequest;
 import com.antra.evaluation.reporting_system.pojo.api.MultiSheetExcelRequest;
@@ -10,7 +11,7 @@ import com.antra.evaluation.reporting_system.pojo.report.ExcelFile;
 import com.antra.evaluation.reporting_system.repo.ExcelRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -23,14 +24,20 @@ public class ExcelServiceImpl implements ExcelService {
 
     private static final Logger log = LoggerFactory.getLogger(ExcelServiceImpl.class);
 
-    ExcelRepository excelRepository;
+    private final ExcelRepository excelRepository;
 
-    private ExcelGenerationService excelGenerationService;
+    private final ExcelGenerationService excelGenerationService;
 
-    @Autowired
-    public ExcelServiceImpl(ExcelRepository excelRepository, ExcelGenerationService excelGenerationService) {
+    private final AmazonS3 s3Client;
+
+    @Value("${s3.bucket}")
+    private String s3Bucket;
+
+
+    public ExcelServiceImpl(ExcelRepository excelRepository, ExcelGenerationService excelGenerationService, AmazonS3 s3Client) {
         this.excelRepository = excelRepository;
         this.excelGenerationService = excelGenerationService;
+        this.s3Client = s3Client;
     }
 
     @Override
@@ -40,32 +47,47 @@ public class ExcelServiceImpl implements ExcelService {
     }
 
     @Override
-    public ExcelFile generateFile(ExcelRequest request, boolean multisheet) {
+    public ExcelFile generateFile(ExcelRequest request, boolean multiSheet) {
+
         ExcelFile fileInfo = new ExcelFile();
         fileInfo.setFileId(UUID.randomUUID().toString());
+
         ExcelData data = new ExcelData();
         data.setTitle(request.getDescription());
         data.setFileId(fileInfo.getFileId());
         data.setSubmitter(fileInfo.getSubmitter());
-        if(multisheet){
+
+        if(multiSheet){
             data.setSheets(generateMultiSheet(request));
         }else {
             data.setSheets(generateSheet(request));
         }
+
         try {
             File generatedFile = excelGenerationService.generateExcelReport(data);
-            fileInfo.setFileLocation(generatedFile.getAbsolutePath());
+
+            log.debug("Upload excel file to s3 {}", generatedFile.getAbsolutePath());
+            s3Client.putObject(s3Bucket, generatedFile.getName(), generatedFile);
+            log.debug("Uploaded");
+
+            fileInfo.setFileLocation(String.join("/", s3Bucket, generatedFile.getName()));
             fileInfo.setFileName(generatedFile.getName());
             fileInfo.setGeneratedTime(LocalDateTime.now());
             fileInfo.setSubmitter(request.getSubmitter());
             fileInfo.setFileSize(generatedFile.length());
             fileInfo.setDescription(request.getDescription());
+
+            if(generatedFile.delete()) {
+                log.debug("deleted");
+            }
+
         } catch (IOException e) {
-//            log.error("Error in generateFile()", e);
             throw new FileGenerationException(e);
         }
+
         excelRepository.saveFile(fileInfo);
         log.debug("Excel File Generated : {}", fileInfo);
+
         return fileInfo;
     }
 
@@ -88,30 +110,43 @@ public class ExcelServiceImpl implements ExcelService {
     private List<ExcelDataSheet> generateSheet(ExcelRequest request) {
         List<ExcelDataSheet> sheets = new ArrayList<>();
         ExcelDataSheet sheet = new ExcelDataSheet();
-        sheet.setHeaders(request.getHeaders().stream().map(ExcelDataHeader::new).collect(Collectors.toList()));
-        sheet.setDataRows(request.getData().stream().map(listOfString -> (List<Object>) new ArrayList<Object>(listOfString)).collect(Collectors.toList()));
+
+        sheet.setHeaders(request.getHeaders().stream()
+                .map(ExcelDataHeader::new)
+                .collect(Collectors.toList()));
+        sheet.setDataRows(request.getData().stream()
+                .map(listOfString -> (List<Object>) new ArrayList<Object>(listOfString))
+                .collect(Collectors.toList()));
         sheet.setTitle("sheet-1");
+
         sheets.add(sheet);
+
         return sheets;
     }
     private List<ExcelDataSheet> generateMultiSheet(ExcelRequest request) {
         List<ExcelDataSheet> sheets = new ArrayList<>();
         int index = request.getHeaders().indexOf(((MultiSheetExcelRequest) request).getSplitBy());
-        Map<String, List<List<String>>> splittedData = request.getData().stream().collect(Collectors.groupingBy(row -> (String)row.get(index)));
-        List<ExcelDataHeader> headers = request.getHeaders().stream().map(ExcelDataHeader::new).collect(Collectors.toList());
-        splittedData.entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach(
+
+        Map<String, List<List<String>>> splitData = request.getData().stream()
+                .collect(Collectors.groupingBy(row -> row.get(index)));
+        List<ExcelDataHeader> headers = request.getHeaders().stream()
+                .map(ExcelDataHeader::new).collect(Collectors.toList());
+
+        splitData.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey()).forEach(
                 entry ->{
                     ExcelDataSheet sheet = new ExcelDataSheet();
                     sheet.setHeaders(headers);
-                    sheet.setDataRows(entry.getValue().stream().map(listOfString -> {
-                        List<Object> listOfObject = new ArrayList<>();
-                        listOfString.forEach(listOfObject::add);
-                        return listOfObject;
-                    }).collect(Collectors.toList()));
+                    sheet.setDataRows(entry.getValue().stream()
+                            .map(listOfString -> {
+                                return (List<Object>) new ArrayList<Object>(listOfString);
+                            })
+                            .collect(Collectors.toList()));
                     sheet.setTitle(entry.getKey());
                     sheets.add(sheet);
                 }
         );
+
         return sheets;
     }
 }

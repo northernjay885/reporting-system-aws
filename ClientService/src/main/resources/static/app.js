@@ -40,10 +40,10 @@ function singleDigit(dig) {
     return ('0' + dig).slice(-2)
 }
 function downloadPDF(reqId){
-    downloadFile('/report/content/'+reqId+ '/PDF');
+    downloadFile('/report/content/' + reqId + '/PDF');
 }
 function downloadExcel(reqId){
-    downloadFile('/report/content/'+reqId+ '/EXCEL');
+    downloadFile('/report/content/'+ reqId + '/EXCEL');
 }
 function downloadFile(urlToSend) {
     var req = new XMLHttpRequest();

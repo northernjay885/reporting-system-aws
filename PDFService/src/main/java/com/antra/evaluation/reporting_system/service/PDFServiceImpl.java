@@ -45,7 +45,7 @@ public class PDFServiceImpl implements PDFService {
 
         File temp = new File(generatedFile.getFileLocation());
         log.debug("Upload temp file to s3 {}", generatedFile.getFileLocation());
-        s3Client.putObject(s3Bucket,file.getId(),temp);
+        s3Client.putObject(s3Bucket, file.getId(), temp);
         log.debug("Uploaded");
 
         file.setFileLocation(String.join("/",s3Bucket,file.getId()));

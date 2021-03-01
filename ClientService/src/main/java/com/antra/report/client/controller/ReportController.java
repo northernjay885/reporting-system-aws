@@ -56,6 +56,7 @@ public class ReportController {
         InputStream fis = reportService.getFileBodyByReqId(reqId, type);
         String fileType = null;
         String fileName = null;
+
         if(type == FileType.PDF) {
             fileType = "application/pdf";
             fileName = "report.pdf";
@@ -63,8 +64,10 @@ public class ReportController {
             fileType = "application/vnd.ms-excel";
             fileName = "report.xls";
         }
+
         response.setHeader("Content-Type", fileType);
         response.setHeader("fileName", fileName);
+
         if (fis != null) {
             FileCopyUtils.copy(fis, response.getOutputStream());
         } else{
@@ -72,8 +75,13 @@ public class ReportController {
         }
         log.debug("Downloaded File:{}", reqId);
     }
+// todo
+//    @DeleteMapping("/report/{reqId}")
+//    public String deleteReport(@PathVariable String reqId) {
+//        reportService.deleteReportByReqId();
+//        return "redirect:/";
+//    }
 
-//   @DeleteMapping
 //   @PutMapping
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
