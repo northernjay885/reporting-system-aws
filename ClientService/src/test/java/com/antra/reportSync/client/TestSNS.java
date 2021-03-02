@@ -1,4 +1,4 @@
-package com.antra.report.client;
+package com.antra.reportSync.client;
 
 import com.antra.report.client.pojo.request.ReportRequest;
 import com.antra.report.client.service.ReportService;

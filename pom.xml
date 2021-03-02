@@ -13,5 +13,6 @@
         <module>ExcelService</module>
         <module>PDFService</module>
         <module>ClientService</module>
+        <module>ClientServiceSync</module>
     </modules>
 </project>

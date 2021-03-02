@@ -2,6 +2,7 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/ClientService/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ClientServiceSync/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ExcelService/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/PDFService/src/main/java" charset="UTF-8" />
   </component>

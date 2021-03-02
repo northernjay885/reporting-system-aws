@@ -1,16 +1,15 @@
-package com.antra.report.client.service;
+package com.antra.ClientServiceSync.service;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.antra.report.client.entity.*;
-import com.antra.report.client.exception.RequestNotFoundException;
-import com.antra.report.client.pojo.EmailType;
-import com.antra.report.client.pojo.FileType;
-import com.antra.report.client.pojo.reponse.ExcelResponse;
-import com.antra.report.client.pojo.reponse.PDFResponse;
-import com.antra.report.client.pojo.reponse.ReportVO;
-import com.antra.report.client.pojo.reponse.SqsResponse;
-import com.antra.report.client.repository.ReportRequestRepo;
-import com.antra.report.client.pojo.request.ReportRequest;
+import com.antra.ClientServiceSync.entity.*;
+import com.antra.ClientServiceSync.exception.RequestNotFoundException;
+import com.antra.ClientServiceSync.pojo.FileType;
+import com.antra.ClientServiceSync.pojo.reponse.ExcelResponse;
+import com.antra.ClientServiceSync.pojo.reponse.PDFResponse;
+import com.antra.ClientServiceSync.pojo.reponse.ReportVO;
+import com.antra.ClientServiceSync.pojo.reponse.SqsResponse;
+import com.antra.ClientServiceSync.pojo.request.ReportRequest;
+import com.antra.ClientServiceSync.repository.ReportRequestRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -30,15 +29,11 @@ public class ReportServiceImpl implements ReportService {
     private static final Logger log = LoggerFactory.getLogger(ReportServiceImpl.class);
 
     private final ReportRequestRepo reportRequestRepo;
-    private final SNSService snsService;
     private final AmazonS3 s3Client;
-    private final EmailService emailService;
 
-    public ReportServiceImpl(ReportRequestRepo reportRequestRepo, SNSService snsService, AmazonS3 s3Client, EmailService emailService) {
+    public ReportServiceImpl(ReportRequestRepo reportRequestRepo, AmazonS3 s3Client) {
         this.reportRequestRepo = reportRequestRepo;
-        this.snsService = snsService;
         this.s3Client = s3Client;
-        this.emailService = emailService;
     }
 
     private ReportRequestEntity persistToLocal(ReportRequest request) {
@@ -105,14 +100,6 @@ public class ReportServiceImpl implements ReportService {
         updateAsyncPDFReport(response);
     }
 
-    @Override
-    @Transactional
-    public ReportVO generateReportsAsync(ReportRequest request) {
-        ReportRequestEntity entity = persistToLocal(request);
-        snsService.sendReportNotification(request);
-        log.info("Send SNS the message: {}",request);
-        return new ReportVO(entity);
-    }
 
     @Override
     public void updateAsyncPDFReport(SqsResponse response) {
@@ -145,8 +132,6 @@ public class ReportServiceImpl implements ReportService {
         }
         entity.setUpdatedTime(LocalDateTime.now());
         reportRequestRepo.save(entity);
-        String to = "lrj193927@gmail.com";
-        emailService.sendEmail(to, EmailType.SUCCESS, entity.getSubmitter());
     }
 
     @Override

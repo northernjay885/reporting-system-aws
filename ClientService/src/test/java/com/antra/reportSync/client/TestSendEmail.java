@@ -1,4 +1,4 @@
-package com.antra.report.client;
+package com.antra.reportSync.client;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

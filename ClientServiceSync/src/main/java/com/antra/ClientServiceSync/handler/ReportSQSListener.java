@@ -1,7 +1,7 @@
-package com.antra.report.client.handler;
+package com.antra.ClientServiceSync.handler;
 
-import com.antra.report.client.pojo.reponse.SqsResponse;
-import com.antra.report.client.service.ReportService;
+import com.antra.ClientServiceSync.pojo.reponse.SqsResponse;
+import com.antra.ClientServiceSync.service.ReportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.aws.messaging.listener.annotation.SqsListener;
