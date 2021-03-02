@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/ExcelService/ExcelService.iml" filepath="$PROJECT_DIR$/ExcelService/ExcelService.iml" />
       <module fileurl="file://$PROJECT_DIR$/PDFService/PDFService.iml" filepath="$PROJECT_DIR$/PDFService/PDFService.iml" />
       <module fileurl="file://$PROJECT_DIR$/ClientServiceSync/clientservicesync.iml" filepath="$PROJECT_DIR$/ClientServiceSync/clientservicesync.iml" />
+      <module fileurl="file://$PROJECT_DIR$/eureka/eureka.iml" filepath="$PROJECT_DIR$/eureka/eureka.iml" />
       <module fileurl="file://$PROJECT_DIR$/reporting_system_aws.iml" filepath="$PROJECT_DIR$/reporting_system_aws.iml" />
     </modules>
   </component>

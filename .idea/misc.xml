@@ -7,6 +7,7 @@
         <option value="$PROJECT_DIR$/clientsyncservice/pom.xml" />
         <option value="$PROJECT_DIR$/clientservicesync/pom.xml" />
         <option value="$PROJECT_DIR$/ClientServiceSync/pom.xml" />
+        <option value="$PROJECT_DIR$/eureka/pom.xml" />
       </list>
     </option>
   </component>

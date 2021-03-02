@@ -9,6 +9,7 @@
         <module name="ExcelService" />
         <module name="PDFService" />
         <module name="ClientService" />
+        <module name="eureka" />
         <module name="clientservicesync" />
       </profile>
     </annotationProcessing>
@@ -17,6 +18,7 @@
       <module name="ClientServiceSync" target="11" />
       <module name="clientservicesync" target="11" />
       <module name="ClientSyncService" target="11" />
+      <module name="eureka" target="11" />
       <module name="ExcelService" target="11" />
       <module name="PDFService" target="11" />
       <module name="reporting_system_aws" target="1.5" />
@@ -30,6 +32,7 @@
       <module name="ExcelService" options="-parameters" />
       <module name="PDFService" options="-parameters" />
       <module name="clientservicesync" options="-parameters" />
+      <module name="eureka" options="-parameters" />
     </option>
   </component>
 </project>
