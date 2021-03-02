@@ -19,7 +19,4 @@ public interface ReportService {
 
     InputStream getFileBodyByReqId(String reqId, FileType type);
 
-    void deleteReportByReqId(String reqId);
-
-    void updateReportDetails(String reqId);
 }

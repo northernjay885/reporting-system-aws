@@ -14,5 +14,6 @@
         <module>PDFService</module>
         <module>ClientService</module>
         <module>ClientServiceSync</module>
+        <module>eureka</module>
     </modules>
 </project>

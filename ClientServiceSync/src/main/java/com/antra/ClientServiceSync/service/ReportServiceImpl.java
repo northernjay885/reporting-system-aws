@@ -22,6 +22,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @Service
@@ -64,29 +66,40 @@ public class ReportServiceImpl implements ReportService {
         sendDirectRequests(request);
         return new ReportVO(reportRequestRepo.findById(request.getReqId()).orElseThrow());
     }
-    //TODO:Change to parallel process using Threadpool? CompletableFuture?
+
     private void sendDirectRequests(ReportRequest request) {
         RestTemplate rs = new RestTemplate();
-        ExcelResponse excelResponse = new ExcelResponse();
-        PDFResponse pdfResponse = new PDFResponse();
-        try {
-            excelResponse = rs.postForEntity("http://localhost:8888/excel", request, ExcelResponse.class).getBody();
-        } catch(Exception e){
-            log.error("Excel Generation Error (Sync) : e", e);
-            excelResponse.setReqId(request.getReqId());
-            excelResponse.setFailed(true);
-        } finally {
-            updateLocal(excelResponse);
-        }
-        try {
-            pdfResponse = rs.postForEntity("http://localhost:9999/pdf", request, PDFResponse.class).getBody();
-        } catch(Exception e){
-            log.error("PDF Generation Error (Sync) : e", e);
-            pdfResponse.setReqId(request.getReqId());
-            pdfResponse.setFailed(true);
-        } finally {
-            updateLocal(pdfResponse);
-        }
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
+
+        Runnable excelTask = () -> {
+            ExcelResponse excelResponse = new ExcelResponse();
+            try {
+                excelResponse = rs.postForEntity("http://localhost:8888/excel", request, ExcelResponse.class).getBody();
+            } catch(Exception e){
+                log.error("Excel Generation Error (Sync) : e", e);
+                excelResponse.setReqId(request.getReqId());
+                excelResponse.setFailed(true);
+            } finally {
+                updateLocal(excelResponse);
+            }
+        };
+
+        Runnable pdfTask = () -> {
+            PDFResponse pdfResponse = new PDFResponse();
+            try {
+                pdfResponse = rs.postForEntity("http://localhost:9999/pdf", request, PDFResponse.class).getBody();
+            } catch(Exception e){
+                log.error("PDF Generation Error (Sync) : e", e);
+                pdfResponse.setReqId(request.getReqId());
+                pdfResponse.setFailed(true);
+            } finally {
+                updateLocal(pdfResponse);
+            }
+        };
+
+        executorService.submit(excelTask);
+        executorService.submit(pdfTask);
+        executorService.shutdown();
     }
 
     private void updateLocal(ExcelResponse excelResponse) {
@@ -157,30 +170,5 @@ public class ReportServiceImpl implements ReportService {
             return s3Client.getObject(bucket, key).getObjectContent();
         }
         return null;
-    }
-
-    @Override
-    @Transactional
-    public void deleteReportByReqId(String reqId) {
-        ReportRequestEntity entity = reportRequestRepo.findById(reqId).orElseThrow(RequestNotFoundException::new);
-        FileType[] types = new FileType[] {FileType.EXCEL, FileType.PDF};
-        for (FileType type : types) {
-            String fileLocation;
-            if (type == FileType.PDF) {
-                fileLocation = entity.getPdfReport().getFileLocation();
-            } else {
-                fileLocation = entity.getExcelReport().getFileLocation();
-            }
-            String bucket = fileLocation.split("/")[0];
-            String key = fileLocation.split("/")[1];
-            s3Client.deleteObject(bucket, key);
-        }
-        reportRequestRepo.deleteById(reqId);
-    }
-
-    @Override
-    public void updateReportDetails(String reqId) {
-        ReportRequestEntity entity = reportRequestRepo.findById(reqId).orElseThrow(RequestNotFoundException::new);
-        //it seems the update feature is not necessary.
     }
 }
