@@ -150,9 +150,11 @@ public class ReportServiceImpl implements ReportService {
             } else {
                 fileLocation = entity.getExcelReport().getFileLocation();
             }
-            String bucket = fileLocation.split("/")[0];
-            String key = fileLocation.split("/")[1];
-            s3Client.deleteObject(bucket, key);
+            if (fileLocation != null) {
+                String bucket = fileLocation.split("/")[0];
+                String key = fileLocation.split("/")[1];
+                s3Client.deleteObject(bucket, key);
+            }
         }
         reportRequestRepo.deleteById(reqId);
     }

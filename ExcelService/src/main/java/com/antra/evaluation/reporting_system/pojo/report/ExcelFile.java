@@ -1,20 +1,31 @@
 package com.antra.evaluation.reporting_system.pojo.report;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+
 import java.time.LocalDateTime;
 
+@DynamoDBTable(tableName = "ExcelFile")
 public class ExcelFile {
+
     private String fileId;
     private String fileName;
     private String fileLocation;
     private String submitter;
     private Long fileSize;
     private String description;
-    private LocalDateTime generatedTime;
+    private String generatedTime;
 
+    public ExcelFile() {
+    }
+
+    @DynamoDBAttribute
     public Long getFileSize() {
         return fileSize;
     }
 
+    @DynamoDBAttribute
     public String getDescription() {
         return description;
     }
@@ -27,6 +38,7 @@ public class ExcelFile {
         this.fileSize = fileSize;
     }
 
+    @DynamoDBHashKey
     public String getFileId() {
         return fileId;
     }
@@ -35,6 +47,7 @@ public class ExcelFile {
         this.fileId = fileId;
     }
 
+    @DynamoDBAttribute
     public String getFileName() {
         return fileName;
     }
@@ -43,6 +56,7 @@ public class ExcelFile {
         this.fileName = fileName;
     }
 
+    @DynamoDBAttribute
     public String getFileLocation() {
         return fileLocation;
     }
@@ -51,6 +65,7 @@ public class ExcelFile {
         this.fileLocation = fileLocation;
     }
 
+    @DynamoDBAttribute
     public String getSubmitter() {
         return submitter;
     }
@@ -59,11 +74,11 @@ public class ExcelFile {
         this.submitter = submitter;
     }
 
-    public LocalDateTime getGeneratedTime() {
+    public String getGeneratedTime() {
         return generatedTime;
     }
 
-    public void setGeneratedTime(LocalDateTime generatedTime) {
+    public void setGeneratedTime(String generatedTime) {
         this.generatedTime = generatedTime;
     }
 

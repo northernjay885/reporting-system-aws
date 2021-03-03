@@ -9,6 +9,7 @@ import com.antra.evaluation.reporting_system.pojo.report.ExcelDataHeader;
 import com.antra.evaluation.reporting_system.pojo.report.ExcelDataSheet;
 import com.antra.evaluation.reporting_system.pojo.report.ExcelFile;
 import com.antra.evaluation.reporting_system.repo.ExcelRepository;
+import org.apache.commons.collections4.IterableUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,7 +43,7 @@ public class ExcelServiceImpl implements ExcelService {
 
     @Override
     public InputStream getExcelBodyById(String id) throws FileNotFoundException {
-        Optional<ExcelFile> fileInfo = excelRepository.getFileById(id);
+        Optional<ExcelFile> fileInfo = excelRepository.findById(id);
         return new FileInputStream(fileInfo.orElseThrow(FileNotFoundException::new).getFileLocation());
     }
 
@@ -72,7 +73,7 @@ public class ExcelServiceImpl implements ExcelService {
 
             fileInfo.setFileLocation(String.join("/", s3Bucket, generatedFile.getName()));
             fileInfo.setFileName(generatedFile.getName());
-            fileInfo.setGeneratedTime(LocalDateTime.now());
+            fileInfo.setGeneratedTime(LocalDateTime.now().toString());
             fileInfo.setSubmitter(request.getSubmitter());
             fileInfo.setFileSize(generatedFile.length());
             fileInfo.setDescription(request.getDescription());
@@ -85,7 +86,7 @@ public class ExcelServiceImpl implements ExcelService {
             throw new FileGenerationException(e);
         }
 
-        excelRepository.saveFile(fileInfo);
+        excelRepository.save(fileInfo);
         log.debug("Excel File Generated : {}", fileInfo);
 
         return fileInfo;
@@ -93,18 +94,19 @@ public class ExcelServiceImpl implements ExcelService {
 
     @Override
     public List<ExcelFile> getExcelList() {
-        return excelRepository.getFiles();
+        return IterableUtils.toList(excelRepository.findAll());
     }
 
     @Override
     public ExcelFile deleteFile(String id) throws FileNotFoundException {
-        ExcelFile excelFile = excelRepository.deleteFile(id);
-        if (excelFile == null) {
+        Optional<ExcelFile> excelFileOpt = excelRepository.findById(id);
+        if (excelFileOpt.isEmpty()) {
             throw new FileNotFoundException();
         }
-        File file = new File(excelFile.getFileLocation());
+        File file = new File(excelFileOpt.get().getFileLocation());
         file.delete();
-        return excelFile;
+        excelRepository.deleteById(id);
+        return excelFileOpt.get();
     }
 
     private List<ExcelDataSheet> generateSheet(ExcelRequest request) {
