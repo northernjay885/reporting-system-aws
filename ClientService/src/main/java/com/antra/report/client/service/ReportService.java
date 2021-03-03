@@ -25,5 +25,5 @@ public interface ReportService {
 
     void deleteReportByReqId(String reqId);
 
-    void updateReportDetails(String reqId);
+//    void updateReportDetails(String reqId);
 }

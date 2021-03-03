@@ -68,17 +68,6 @@ public class ReportServiceImpl implements ReportService {
         return feignClient.generateReportsSync(request);
     }
 
-    private void updateLocal(ExcelResponse excelResponse) {
-        SqsResponse response = new SqsResponse();
-        BeanUtils.copyProperties(excelResponse, response);
-        updateAsyncExcelReport(response);
-    }
-    private void updateLocal(PDFResponse pdfResponse) {
-        SqsResponse response = new SqsResponse();
-        BeanUtils.copyProperties(pdfResponse, response);
-        updateAsyncPDFReport(response);
-    }
-
     @Override
     @Transactional
     public ReportVO generateReportsAsync(ReportRequest request) {
@@ -98,7 +87,8 @@ public class ReportServiceImpl implements ReportService {
         setReportByType(response, FileType.EXCEL);
     }
 
-    private void setReportByType(SqsResponse response, FileType type) {
+    @Transactional
+    void setReportByType(SqsResponse response, FileType type) {
         ReportRequestEntity entity = reportRequestRepo.findById(response.getReqId()).orElseThrow(RequestNotFoundException::new);
         BaseReportEntity report;
         if (type == FileType.EXCEL) {
@@ -167,9 +157,9 @@ public class ReportServiceImpl implements ReportService {
         reportRequestRepo.deleteById(reqId);
     }
 
-    @Override
-    public void updateReportDetails(String reqId) {
-        ReportRequestEntity entity = reportRequestRepo.findById(reqId).orElseThrow(RequestNotFoundException::new);
-        //it seems the update feature is not necessary.
-    }
+//    @Override
+//    public void updateReportDetails(String reqId) {
+//        ReportRequestEntity entity = reportRequestRepo.findById(reqId).orElseThrow(RequestNotFoundException::new);
+//        //it seems the update feature is not necessary.
+//    }
 }

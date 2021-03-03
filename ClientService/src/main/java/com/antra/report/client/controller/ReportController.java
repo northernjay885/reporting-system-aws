@@ -83,11 +83,11 @@ public class ReportController {
         return new ResponseEntity<>(reqId, HttpStatus.OK);
     }
 
-   @PutMapping("/report/content/{reqId}")
-   public void uploadReport(@PathVariable String reqId, @PathVariable String type) {
-        log.info("Got request to uploadReport - reqId: {}, type: {}", reqId, type);
-        reportService.updateReportDetails(reqId);
-   }
+//   @PutMapping("/report/content/{reqId}")
+//   public void uploadReport(@PathVariable String reqId, @PathVariable String type) {
+//        log.info("Got request to uploadReport - reqId: {}, type: {}", reqId, type);
+//        reportService.updateReportDetails(reqId);
+//   }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<GeneralResponse> handleValidationException(MethodArgumentNotValidException e) {

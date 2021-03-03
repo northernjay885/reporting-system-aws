@@ -40,6 +40,7 @@ function singleDigit(dig) {
     return ('0' + dig).slice(-2)
 }
 function downloadPDF(reqId){
+    console.log(reqId);
     downloadFile('/report/content/' + reqId + '/PDF');
 }
 function downloadExcel(reqId){
@@ -80,9 +81,9 @@ function showDelete(reqId){
     }
 }
 
-function toggleAction() {
+function toggleAction(id) {
     console.log("I'm in myFunction");
-    document.getElementById("myDropdown").classList.toggle("show");
+    document.getElementById(id).classList.toggle("show");
 }
 
 // Close the dropdown if the user clicks outside of it
@@ -100,10 +101,10 @@ window.onclick = function(event) {
 }
 
 function actionList(ps, es, id) {
-    return "<button onclick='toggleAction()' class='dropbtn'>Actions</button>" +
-            "<div id='myDropdown' class='dropdown-content'>" +
-                actionLinks(ps, es, id) +
-            "</div>";
+    return  "<button onclick='toggleAction(\"" + id + "\")' class='dropbtn'>actions</button>" +
+        "<div id='" + id + "' class='dropdown-content'>" +
+        actionLinks(ps, es, id) +
+        "</div>";
 }
 
 function updateInfo(reqId) {
@@ -112,6 +113,7 @@ function updateInfo(reqId) {
 
 
 function actionLinks(ps, es, id) {
+    console.log("I'm here in actionLinks and the id is :" + id);
     return (ps === 'COMPLETED'?"<a onclick='downloadPDF(\""+id+"\")' href='#'>Download PDF</a>":"") +
            (es === 'COMPLETED'?"<a onclick='downloadExcel(\""+id+"\")' href='#'>Download Excel</a>":"") +
            "<a onclick='showDelete(\""+id+"\")' href='#'>Delete</a>" +
