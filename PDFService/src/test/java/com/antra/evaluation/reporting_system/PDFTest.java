@@ -1,11 +1,13 @@
 package com.antra.evaluation.reporting_system;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 
+@Disabled
 public class PDFTest {
 
     @Test

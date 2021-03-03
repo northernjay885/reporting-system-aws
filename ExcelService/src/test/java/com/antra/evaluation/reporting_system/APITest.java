@@ -18,6 +18,7 @@ import java.io.FileNotFoundException;
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.mockito.ArgumentMatchers.anyString;
 
+@Disabled
 public class APITest {
     @Mock
     ExcelService excelService;

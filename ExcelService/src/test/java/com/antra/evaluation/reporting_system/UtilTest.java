@@ -1,9 +1,11 @@
 package com.antra.evaluation.reporting_system;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+@Disabled
 public class UtilTest {
     private static final String DOWNLOAD_API_URI = "/excel/{id}/content";
 

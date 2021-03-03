@@ -1,5 +1,6 @@
 package com.antra.reportSync.client;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -8,6 +9,7 @@ import org.springframework.cloud.aws.messaging.core.QueueMessagingTemplate;
 import java.util.HashMap;
 import java.util.Map;
 
+@Disabled
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class TestSendEmail {
 
