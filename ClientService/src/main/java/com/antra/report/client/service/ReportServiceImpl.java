@@ -5,15 +5,13 @@ import com.antra.report.client.entity.*;
 import com.antra.report.client.exception.RequestNotFoundException;
 import com.antra.report.client.pojo.EmailType;
 import com.antra.report.client.pojo.FileType;
-import com.antra.report.client.pojo.reponse.ExcelResponse;
-import com.antra.report.client.pojo.reponse.PDFResponse;
-import com.antra.report.client.pojo.reponse.ReportVO;
-import com.antra.report.client.pojo.reponse.SqsResponse;
+import com.antra.report.client.pojo.reponse.*;
 import com.antra.report.client.repository.ReportRequestRepo;
 import com.antra.report.client.pojo.request.ReportRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -29,12 +27,14 @@ import java.util.stream.Collectors;
 public class ReportServiceImpl implements ReportService {
     private static final Logger log = LoggerFactory.getLogger(ReportServiceImpl.class);
 
+    private final ReportServiceSyncFeignClient feignClient;
     private final ReportRequestRepo reportRequestRepo;
     private final SNSService snsService;
     private final AmazonS3 s3Client;
     private final EmailService emailService;
 
-    public ReportServiceImpl(ReportRequestRepo reportRequestRepo, SNSService snsService, AmazonS3 s3Client, EmailService emailService) {
+    public ReportServiceImpl(ReportServiceSyncFeignClient feignClient, ReportRequestRepo reportRequestRepo, SNSService snsService, AmazonS3 s3Client, EmailService emailService) {
+        this.feignClient = feignClient;
         this.reportRequestRepo = reportRequestRepo;
         this.snsService = snsService;
         this.s3Client = s3Client;
@@ -64,34 +64,8 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public ReportVO generateReportsSync(ReportRequest request) {
-        persistToLocal(request);
-        sendDirectRequests(request);
-        return new ReportVO(reportRequestRepo.findById(request.getReqId()).orElseThrow());
-    }
-    //TODO:Change to parallel process using Threadpool? CompletableFuture?
-    private void sendDirectRequests(ReportRequest request) {
-        RestTemplate rs = new RestTemplate();
-        ExcelResponse excelResponse = new ExcelResponse();
-        PDFResponse pdfResponse = new PDFResponse();
-        try {
-            excelResponse = rs.postForEntity("http://localhost:8888/excel", request, ExcelResponse.class).getBody();
-        } catch(Exception e){
-            log.error("Excel Generation Error (Sync) : e", e);
-            excelResponse.setReqId(request.getReqId());
-            excelResponse.setFailed(true);
-        } finally {
-            updateLocal(excelResponse);
-        }
-        try {
-            pdfResponse = rs.postForEntity("http://localhost:9999/pdf", request, PDFResponse.class).getBody();
-        } catch(Exception e){
-            log.error("PDF Generation Error (Sync) : e", e);
-            pdfResponse.setReqId(request.getReqId());
-            pdfResponse.setFailed(true);
-        } finally {
-            updateLocal(pdfResponse);
-        }
+    public ResponseEntity<GeneralResponse> generateReportsSync(ReportRequest request) {
+        return feignClient.generateReportsSync(request);
     }
 
     private void updateLocal(ExcelResponse excelResponse) {

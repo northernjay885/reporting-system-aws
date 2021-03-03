@@ -5,6 +5,7 @@ import com.antra.report.client.pojo.reponse.ErrorResponse;
 import com.antra.report.client.pojo.reponse.GeneralResponse;
 import com.antra.report.client.pojo.request.ReportRequest;
 import com.antra.report.client.service.ReportService;
+import com.antra.report.client.service.ReportServiceSyncFeignClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -38,8 +39,7 @@ public class ReportController {
     @PostMapping("/report/sync")
     public ResponseEntity<GeneralResponse> createReportDirectly(@RequestBody @Validated ReportRequest request) {
         log.info("Got Request to generate report - sync: {}", request);
-        request.setDescription(String.join(" - ", "Sync", request.getDescription()));
-        return ResponseEntity.ok(new GeneralResponse(reportService.generateReportsSync(request)));
+        return reportService.generateReportsSync(request);
     }
 
     @PostMapping("/report/async")
