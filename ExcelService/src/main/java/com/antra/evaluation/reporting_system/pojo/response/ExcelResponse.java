@@ -1,4 +1,4 @@
-package com.antra.report.client.pojo.reponse;
+package com.antra.evaluation.reporting_system.pojo.response;
 
 import java.time.LocalDateTime;
 
@@ -6,7 +6,8 @@ public class ExcelResponse {
     private String reqId;
     private String fileId;
     private String fileLocation;
-    private long fileSize;
+    private String fileDownloadLink;
+    private Long fileSize;
     private String fileName;
     private String submitter;
     private String description;
@@ -37,11 +38,19 @@ public class ExcelResponse {
         this.fileLocation = fileLocation;
     }
 
-    public long getFileSize() {
+    public String getFileDownloadLink() {
+        return fileDownloadLink;
+    }
+
+    public void setFileDownloadLink(String fileDownloadLink) {
+        this.fileDownloadLink = fileDownloadLink;
+    }
+
+    public Long getFileSize() {
         return fileSize;
     }
 
-    public void setFileSize(long fileSize) {
+    public void setFileSize(Long fileSize) {
         this.fileSize = fileSize;
     }
 

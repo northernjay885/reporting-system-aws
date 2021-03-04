@@ -1,4 +1,4 @@
-package com.antra.report.client.handler;
+package com.antra.report.client.listener;
 
 import com.antra.report.client.pojo.reponse.SqsResponse;
 import com.antra.report.client.service.ReportService;
@@ -21,14 +21,12 @@ public class ReportSQSListener {
     @SqsListener("PDF_Response_Queue")
     public void responseQueueListenerPdf(SqsResponse response) {
         log.info("Get response from sqs : {}", response);
-        //queueListener(request.getPdfRequest());
         reportService.updateAsyncPDFReport(response);
     }
 
     @SqsListener("Excel_Response_Queue")
     public void responseQueueListenerExcel(SqsResponse response) {
         log.info("Get response from sqs : {}", response);
-        //queueListener(request.getPdfRequest());
         reportService.updateAsyncExcelReport(response);
     }
 

@@ -60,7 +60,8 @@ public class ReportRequest {
     @Override
     public String toString() {
         return "ReportRequest{" +
-                "headers=" + headers +
+                "reqId='" + reqId + '\'' +
+                ", headers=" + headers +
                 ", description='" + description + '\'' +
                 ", data=" + data +
                 ", submitter='" + submitter + '\'' +

@@ -1,10 +1,10 @@
-package com.antra.evaluation.reporting_system.endpoint;
+package com.antra.evaluation.reporting_system.controller;
 
 import com.antra.evaluation.reporting_system.exception.FileGenerationException;
-import com.antra.evaluation.reporting_system.pojo.api.ErrorResponse;
-import com.antra.evaluation.reporting_system.pojo.api.ExcelRequest;
-import com.antra.evaluation.reporting_system.pojo.api.ExcelResponse;
-import com.antra.evaluation.reporting_system.pojo.api.MultiSheetExcelRequest;
+import com.antra.evaluation.reporting_system.pojo.response.ErrorResponse;
+import com.antra.evaluation.reporting_system.pojo.request.ExcelRequest;
+import com.antra.evaluation.reporting_system.pojo.response.ExcelResponse;
+import com.antra.evaluation.reporting_system.pojo.request.MultiSheetExcelRequest;
 import com.antra.evaluation.reporting_system.pojo.report.ExcelFile;
 import com.antra.evaluation.reporting_system.service.ExcelService;
 import io.swagger.annotations.ApiOperation;
@@ -14,16 +14,12 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.security.InvalidParameterException;
 import java.util.List;
 import java.util.stream.Collectors;

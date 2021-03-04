@@ -8,15 +8,15 @@ import org.springframework.cloud.aws.messaging.core.NotificationMessagingTemplat
 import org.springframework.stereotype.Service;
 
 @Service
-public class SNSServiceImpl implements SNSService {
+public class SnsReportingServiceImpl implements SnsReportingService {
 
     private final NotificationMessagingTemplate notificationMessagingTemplate;
 
-    @Value("${app.aws.sns.topic}")
+    @Value("${app.aws.sns.report.topic}")
     private String snsTopic;
 
     @Autowired
-    public SNSServiceImpl(AmazonSNS amazonSns) {
+    public SnsReportingServiceImpl(AmazonSNS amazonSns) {
         this.notificationMessagingTemplate = new NotificationMessagingTemplate(amazonSns);
     }
 

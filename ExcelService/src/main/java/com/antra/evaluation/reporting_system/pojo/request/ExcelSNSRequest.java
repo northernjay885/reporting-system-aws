@@ -1,4 +1,4 @@
-package com.antra.evaluation.reporting_system.pojo.api;
+package com.antra.evaluation.reporting_system.pojo.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonParser;

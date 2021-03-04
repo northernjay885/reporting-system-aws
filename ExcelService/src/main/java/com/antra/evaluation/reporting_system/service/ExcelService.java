@@ -1,6 +1,6 @@
 package com.antra.evaluation.reporting_system.service;
 
-import com.antra.evaluation.reporting_system.pojo.api.ExcelRequest;
+import com.antra.evaluation.reporting_system.pojo.request.ExcelRequest;
 import com.antra.evaluation.reporting_system.pojo.report.ExcelFile;
 
 import java.io.FileNotFoundException;

@@ -5,7 +5,7 @@ import com.antra.report.client.pojo.reponse.ErrorResponse;
 import com.antra.report.client.pojo.reponse.GeneralResponse;
 import com.antra.report.client.pojo.request.ReportRequest;
 import com.antra.report.client.service.ReportService;
-import com.antra.report.client.service.ReportServiceSyncFeignClient;
+import com.antra.report.client.service.SnsReportingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

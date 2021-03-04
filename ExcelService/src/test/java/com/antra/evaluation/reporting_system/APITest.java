@@ -1,6 +1,6 @@
 package com.antra.evaluation.reporting_system;
 
-import com.antra.evaluation.reporting_system.endpoint.ExcelGenerationController;
+import com.antra.evaluation.reporting_system.controller.ExcelGenerationController;
 import com.antra.evaluation.reporting_system.service.ExcelService;
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;

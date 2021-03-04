@@ -4,8 +4,13 @@ public class SqsResponse {
     private String fileId;
     private String reqId;
     private String fileLocation;
+    private String responseType;
     private long fileSize;
     private boolean failed;
+
+    public String getResponseType() { return responseType; }
+
+    public void setResponseType(String responseType) { this.responseType = responseType; }
 
     public String getFileId() {
         return fileId;

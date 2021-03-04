@@ -3,7 +3,7 @@ package com.antra.evaluation.reporting_system.service;
 import com.amazonaws.services.s3.AmazonS3;
 import com.antra.evaluation.reporting_system.pojo.api.PDFRequest;
 import com.antra.evaluation.reporting_system.pojo.report.PDFFile;
-import com.antra.evaluation.reporting_system.repo.PDFRepository;
+import com.antra.evaluation.reporting_system.repository.PDFRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,7 +36,7 @@ public class PDFServiceImpl implements PDFService {
     @Override
     public PDFFile createPDF(final PDFRequest request) {
         PDFFile file = new PDFFile();
-        file.setId("File-" + UUID.randomUUID().toString());
+        file.setId(UUID.randomUUID().toString());
         file.setSubmitter(request.getSubmitter());
         file.setDescription(request.getDescription());
         file.setGeneratedTime(LocalDateTime.now().toString());

@@ -1,8 +1,8 @@
-package com.antra.evaluation.reporting_system.endpoint;
+package com.antra.evaluation.reporting_system.listener;
 
-import com.antra.evaluation.reporting_system.pojo.api.ExcelRequest;
-import com.antra.evaluation.reporting_system.pojo.api.ExcelResponse;
-import com.antra.evaluation.reporting_system.pojo.api.ExcelSNSRequest;
+import com.antra.evaluation.reporting_system.pojo.request.ExcelRequest;
+import com.antra.evaluation.reporting_system.pojo.response.ExcelResponse;
+import com.antra.evaluation.reporting_system.pojo.request.ExcelSNSRequest;
 import com.antra.evaluation.reporting_system.pojo.report.ExcelFile;
 import com.antra.evaluation.reporting_system.service.ExcelService;
 import org.slf4j.Logger;
@@ -25,9 +25,7 @@ public class ExcelRequestQueueListener {
         this.excelService = excelService;
     }
 
-   // @SqsListener("PDF_Request_Queue")
     public void queueListener(ExcelRequest request) {
-//        log.info("Get request: {}", request);
         ExcelFile file = null;
         ExcelResponse response = new ExcelResponse();
         response.setReqId(request.getReqId());

@@ -1,4 +1,4 @@
-package com.antra.evaluation.reporting_system.repo;
+package com.antra.evaluation.reporting_system.repository;
 
 import com.antra.evaluation.reporting_system.pojo.report.PDFFile;
 import org.socialsignin.spring.data.dynamodb.repository.EnableScan;

@@ -1,4 +1,4 @@
-package com.antra.evaluation.reporting_system.pojo.api;
+package com.antra.evaluation.reporting_system.pojo.response;
 
 import org.springframework.http.HttpStatus;
 

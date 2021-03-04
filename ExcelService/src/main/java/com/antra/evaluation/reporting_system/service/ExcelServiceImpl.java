@@ -2,13 +2,13 @@ package com.antra.evaluation.reporting_system.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.antra.evaluation.reporting_system.exception.FileGenerationException;
-import com.antra.evaluation.reporting_system.pojo.api.ExcelRequest;
-import com.antra.evaluation.reporting_system.pojo.api.MultiSheetExcelRequest;
+import com.antra.evaluation.reporting_system.pojo.request.ExcelRequest;
+import com.antra.evaluation.reporting_system.pojo.request.MultiSheetExcelRequest;
 import com.antra.evaluation.reporting_system.pojo.report.ExcelData;
 import com.antra.evaluation.reporting_system.pojo.report.ExcelDataHeader;
 import com.antra.evaluation.reporting_system.pojo.report.ExcelDataSheet;
 import com.antra.evaluation.reporting_system.pojo.report.ExcelFile;
-import com.antra.evaluation.reporting_system.repo.ExcelRepository;
+import com.antra.evaluation.reporting_system.repository.ExcelRepository;
 import org.apache.commons.collections4.IterableUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

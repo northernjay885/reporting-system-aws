@@ -2,7 +2,7 @@ package com.antra.reportSync.client;
 
 import com.antra.report.client.pojo.request.ReportRequest;
 import com.antra.report.client.service.ReportService;
-import com.antra.report.client.service.SNSService;
+import com.antra.report.client.service.SnsReportingService;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import java.util.List;
 public class TestSNS {
 
     @Autowired
-    SNSService snsService;
+    SnsReportingService snsReportingService;
 
     @Autowired
     ReportService reportService;
@@ -37,6 +37,6 @@ public class TestSNS {
         request.setHeaders(List.of("Id","Name","Age"));
         request.setData(List.of(List.of("1","Dd","23"),List.of("2","AJ","32")));
 
-        snsService.sendReportNotification(request);
+        snsReportingService.sendReportNotification(request);
     }
 }

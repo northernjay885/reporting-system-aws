@@ -6,6 +6,7 @@ import com.antra.report.client.exception.RequestNotFoundException;
 import com.antra.report.client.pojo.EmailType;
 import com.antra.report.client.pojo.FileType;
 import com.antra.report.client.pojo.reponse.*;
+import com.antra.report.client.pojo.request.CrudRequest;
 import com.antra.report.client.repository.ReportRequestRepo;
 import com.antra.report.client.pojo.request.ReportRequest;
 import org.slf4j.Logger;
@@ -14,7 +15,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.InputStream;
 import java.time.LocalDateTime;
@@ -29,14 +29,21 @@ public class ReportServiceImpl implements ReportService {
 
     private final ReportServiceSyncFeignClient feignClient;
     private final ReportRequestRepo reportRequestRepo;
-    private final SNSService snsService;
+    private final SnsReportingService snsReportingService;
+    private final SnsCrudService snsCrudService;
     private final AmazonS3 s3Client;
     private final EmailService emailService;
 
-    public ReportServiceImpl(ReportServiceSyncFeignClient feignClient, ReportRequestRepo reportRequestRepo, SNSService snsService, AmazonS3 s3Client, EmailService emailService) {
+    public ReportServiceImpl(ReportServiceSyncFeignClient feignClient,
+                             ReportRequestRepo reportRequestRepo,
+                             SnsReportingService snsReportingService,
+                             SnsCrudService snsCrudService,
+                             AmazonS3 s3Client,
+                             EmailService emailService) {
         this.feignClient = feignClient;
         this.reportRequestRepo = reportRequestRepo;
-        this.snsService = snsService;
+        this.snsReportingService = snsReportingService;
+        this.snsCrudService = snsCrudService;
         this.s3Client = s3Client;
         this.emailService = emailService;
     }
@@ -72,7 +79,7 @@ public class ReportServiceImpl implements ReportService {
     @Transactional
     public ReportVO generateReportsAsync(ReportRequest request) {
         ReportRequestEntity entity = persistToLocal(request);
-        snsService.sendReportNotification(request);
+        snsReportingService.sendReportNotification(request);
         log.info("Send SNS the message: {}",request);
         return new ReportVO(entity);
     }
@@ -144,6 +151,7 @@ public class ReportServiceImpl implements ReportService {
     @Transactional
     public void deleteReportByReqId(String reqId) {
         ReportRequestEntity entity = reportRequestRepo.findById(reqId).orElseThrow(RequestNotFoundException::new);
+
         FileType[] types = new FileType[] {FileType.EXCEL, FileType.PDF};
         for (FileType type : types) {
             String fileLocation;
@@ -158,6 +166,18 @@ public class ReportServiceImpl implements ReportService {
                 s3Client.deleteObject(bucket, key);
             }
         }
+
+        CrudRequest request = new CrudRequest();
+        request.setCrudType("DELETE");
+        if (entity.getExcelReport().getFileId() != null) {
+            request.setFileId(entity.getExcelReport().getFileId());
+        } else {
+            request.setFileId(entity.getPdfReport().getFileId());
+        }
+        request.setId(UUID.randomUUID().toString());
+
+        snsCrudService.sendCrudNotification(request);
+        log.debug("crud request with id: {} sent", request.getId());
         reportRequestRepo.deleteById(reqId);
     }
 
