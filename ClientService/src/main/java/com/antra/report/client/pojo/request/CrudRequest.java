@@ -3,12 +3,15 @@ package com.antra.report.client.pojo.request;
 import javax.validation.constraints.NotNull;
 
 public class CrudRequest {
+
     @NotNull
     private String id;
     @NotNull
     private String crudType;
-    @NotNull
-    private String fileId;
+
+    private String excelFileId;
+
+    private String pdfFileId;
 
     public String getId() {
         return id;
@@ -26,12 +29,20 @@ public class CrudRequest {
         this.crudType = crudType;
     }
 
-    public String getFileId() {
-        return fileId;
+    public String getExcelFileId() {
+        return excelFileId;
     }
 
-    public void setFileId(String fileId) {
-        this.fileId = fileId;
+    public void setExcelFileId(String excelFileId) {
+        this.excelFileId = excelFileId;
+    }
+
+    public String getPdfFileId() {
+        return pdfFileId;
+    }
+
+    public void setPdfFileId(String pdfFileId) {
+        this.pdfFileId = pdfFileId;
     }
 
     @Override
@@ -39,7 +50,8 @@ public class CrudRequest {
         return "CrudRequest{" +
                 "id='" + id + '\'' +
                 ", crudType='" + crudType + '\'' +
-                ", fileId='" + fileId + '\'' +
+                ", excelFileId='" + excelFileId + '\'' +
+                ", pdfFileId='" + pdfFileId + '\'' +
                 '}';
     }
 }

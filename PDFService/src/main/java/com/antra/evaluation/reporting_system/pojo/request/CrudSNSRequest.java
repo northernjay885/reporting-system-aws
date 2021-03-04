@@ -1,4 +1,4 @@
-package com.antra.evaluation.reporting_system.pojo.api;
+package com.antra.evaluation.reporting_system.pojo.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonParser;
@@ -10,33 +10,33 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.io.IOException;
 
-public class PDFSNSRequest {
+public class CrudSNSRequest {
     @JsonProperty("Message")
-    @JsonDeserialize(using = SNSMessageDeserializer.class)
-    PDFRequest pdfRequest;
+    @JsonDeserialize(using = SNSCrudMessageDeserializer.class)
+    CrudRequest crudRequest;
 
-    public PDFRequest getPdfRequest() {
-        return pdfRequest;
+    public CrudRequest getCrudRequest() {
+        return crudRequest;
     }
 
-    public void setPdfRequest(PDFRequest pdfRequest) {
-        this.pdfRequest = pdfRequest;
+    public void setCrudRequest(CrudRequest crudRequest) {
+        this.crudRequest = crudRequest;
     }
 
     @Override
     public String toString() {
-        return "PDFSNSRequest{" +
-                "pdfRequest=" + pdfRequest +
+        return "CrudSNSRequest{" +
+                "crudRequest=" + crudRequest +
                 '}';
     }
-
 }
-class SNSMessageDeserializer extends JsonDeserializer<PDFRequest> {
+
+class SNSCrudMessageDeserializer extends JsonDeserializer<CrudRequest> {
     @Override
-    public PDFRequest deserialize(JsonParser p, DeserializationContext ctxt)
+    public CrudRequest deserialize(JsonParser p, DeserializationContext ctxt)
             throws IOException, JsonProcessingException {
         String text = p.getText();
         ObjectMapper mapper = (ObjectMapper) p.getCodec();
-        return mapper.readValue(text, PDFRequest.class);
+        return mapper.readValue(text, CrudRequest.class);
     }
 }

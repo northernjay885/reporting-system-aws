@@ -1,7 +1,5 @@
-package com.antra.evaluation.reporting_system.pojo.api;
+package com.antra.evaluation.reporting_system.pojo.response;
 
-
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 
 public class PDFResponse {
 

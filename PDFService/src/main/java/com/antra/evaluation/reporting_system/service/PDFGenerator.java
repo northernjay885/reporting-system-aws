@@ -1,6 +1,6 @@
 package com.antra.evaluation.reporting_system.service;
 
-import com.antra.evaluation.reporting_system.pojo.api.PDFRequest;
+import com.antra.evaluation.reporting_system.pojo.request.PDFRequest;
 import com.antra.evaluation.reporting_system.pojo.exception.PDFGenerationException;
 import com.antra.evaluation.reporting_system.pojo.report.PDFFile;
 import net.sf.jasperreports.engine.JRException;

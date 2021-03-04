@@ -169,11 +169,8 @@ public class ReportServiceImpl implements ReportService {
 
         CrudRequest request = new CrudRequest();
         request.setCrudType("DELETE");
-        if (entity.getExcelReport().getFileId() != null) {
-            request.setFileId(entity.getExcelReport().getFileId());
-        } else {
-            request.setFileId(entity.getPdfReport().getFileId());
-        }
+        request.setExcelFileId(entity.getExcelReport().getFileId());
+        request.setPdfFileId(entity.getPdfReport().getFileId());
         request.setId(UUID.randomUUID().toString());
 
         snsCrudService.sendCrudNotification(request);

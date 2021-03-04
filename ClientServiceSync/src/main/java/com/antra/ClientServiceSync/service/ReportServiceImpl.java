@@ -24,6 +24,7 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 @Service
@@ -70,6 +71,7 @@ public class ReportServiceImpl implements ReportService {
     private void sendDirectRequests(ReportRequest request) {
         RestTemplate rs = new RestTemplate();
         ExecutorService executorService = Executors.newFixedThreadPool(2);
+        ReentrantLock lock = new ReentrantLock();
 
         Runnable excelTask = () -> {
             ExcelResponse excelResponse = new ExcelResponse();
@@ -80,7 +82,15 @@ public class ReportServiceImpl implements ReportService {
                 excelResponse.setReqId(request.getReqId());
                 excelResponse.setFailed(true);
             } finally {
-                updateLocal(excelResponse);
+                lock.lock();
+                try {
+                    updateLocal(excelResponse);
+                } catch (Exception es) {
+                    log.error("failed to persist the excel record to local database");
+                    es.printStackTrace();
+                } finally {
+                    lock.unlock();
+                }
             }
         };
 
@@ -93,7 +103,15 @@ public class ReportServiceImpl implements ReportService {
                 pdfResponse.setReqId(request.getReqId());
                 pdfResponse.setFailed(true);
             } finally {
-                updateLocal(pdfResponse);
+                lock.lock();
+                try {
+                    updateLocal(pdfResponse);
+                } catch (Exception es) {
+                    log.error("failed to persist the excel record to local database");
+                    es.printStackTrace();
+                } finally {
+                    lock.unlock();
+                }
             }
         };
 

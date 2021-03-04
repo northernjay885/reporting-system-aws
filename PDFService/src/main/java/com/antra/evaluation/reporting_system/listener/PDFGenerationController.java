@@ -1,7 +1,7 @@
 package com.antra.evaluation.reporting_system.listener;
 
-import com.antra.evaluation.reporting_system.pojo.api.PDFRequest;
-import com.antra.evaluation.reporting_system.pojo.api.PDFResponse;
+import com.antra.evaluation.reporting_system.pojo.request.PDFRequest;
+import com.antra.evaluation.reporting_system.pojo.response.PDFResponse;
 import com.antra.evaluation.reporting_system.pojo.report.PDFFile;
 import com.antra.evaluation.reporting_system.service.PDFService;
 import org.slf4j.Logger;

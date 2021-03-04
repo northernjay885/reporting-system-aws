@@ -1,7 +1,7 @@
 package com.antra.evaluation.reporting_system.service;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.antra.evaluation.reporting_system.pojo.api.PDFRequest;
+import com.antra.evaluation.reporting_system.pojo.request.PDFRequest;
 import com.antra.evaluation.reporting_system.pojo.report.PDFFile;
 import com.antra.evaluation.reporting_system.repository.PDFRepository;
 import org.slf4j.Logger;
@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -59,6 +61,16 @@ public class PDFServiceImpl implements PDFService {
         }
 
         return file;
+    }
+
+    @Override
+    public PDFFile deleteFile(String id) throws FileNotFoundException {
+        Optional<PDFFile> pdfFileOpt = repository.findById(id);
+        if (pdfFileOpt.isEmpty()) {
+            throw new FileNotFoundException();
+        }
+        repository.deleteById(id);
+        return pdfFileOpt.get();
     }
 
 }
