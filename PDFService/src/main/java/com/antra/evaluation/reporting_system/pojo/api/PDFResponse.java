@@ -1,8 +1,8 @@
 package com.antra.evaluation.reporting_system.pojo.api;
 
-import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+
 public class PDFResponse {
 
     private String fileId;
@@ -13,7 +13,6 @@ public class PDFResponse {
 
     public PDFResponse() {
     }
-
 
     public String getFileId() {
         return fileId;

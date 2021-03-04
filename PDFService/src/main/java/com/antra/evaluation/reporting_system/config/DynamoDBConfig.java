@@ -7,14 +7,14 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
-import com.antra.evaluation.reporting_system.repo.ExcelRepository;
+import com.antra.evaluation.reporting_system.repo.PDFRepository;
 import org.socialsignin.spring.data.dynamodb.repository.config.EnableDynamoDBRepositories;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableDynamoDBRepositories(basePackageClasses = ExcelRepository.class)
+@EnableDynamoDBRepositories(basePackageClasses = PDFRepository.class)
 public class DynamoDBConfig {
 
     @Value("${AWS_CREDENTIALS_ACCESS_KEY}")

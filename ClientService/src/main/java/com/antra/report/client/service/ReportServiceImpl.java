@@ -78,16 +78,17 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
+    @Transactional
     public void updateAsyncPDFReport(SqsResponse response) {
         setReportByType(response, FileType.PDF);
     }
 
     @Override
+    @Transactional
     public void updateAsyncExcelReport(SqsResponse response) {
         setReportByType(response, FileType.EXCEL);
     }
 
-    @Transactional
     void setReportByType(SqsResponse response, FileType type) {
         ReportRequestEntity entity = reportRequestRepo.findById(response.getReqId()).orElseThrow(RequestNotFoundException::new);
         BaseReportEntity report;
@@ -108,6 +109,7 @@ public class ReportServiceImpl implements ReportService {
             report.setFileSize(response.getFileSize());
         }
         entity.setUpdatedTime(LocalDateTime.now());
+        log.debug("Save method will be called!");
         reportRequestRepo.save(entity);
         String to = "lrj193927@gmail.com";
         emailService.sendEmail(to, EmailType.SUCCESS, entity.getSubmitter());

@@ -39,7 +39,7 @@ public class PDFServiceImpl implements PDFService {
         file.setId("File-" + UUID.randomUUID().toString());
         file.setSubmitter(request.getSubmitter());
         file.setDescription(request.getDescription());
-        file.setGeneratedTime(LocalDateTime.now());
+        file.setGeneratedTime(LocalDateTime.now().toString());
 
         PDFFile generatedFile= generator.generate(request);
 

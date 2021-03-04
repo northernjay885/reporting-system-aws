@@ -9,11 +9,5 @@ import java.util.Optional;
 
 @EnableScan
 public interface ExcelRepository extends CrudRepository<ExcelFile, String> {
-//    Optional<ExcelFile> getFileById(String id);
-//
-//    ExcelFile saveFile(ExcelFile file);
-//
-//    ExcelFile deleteFile(String id);
-//
-//    List<ExcelFile> getFiles();
+
 }

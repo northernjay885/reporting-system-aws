@@ -1,10 +1,9 @@
 package com.antra.evaluation.reporting_system.pojo.report;
 
-import org.springframework.data.mongodb.core.mapping.Document;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
-import java.time.LocalDateTime;
-
-@Document
+@DynamoDBTable(tableName = "PDFFile")
 public class PDFFile {
     private String id;
     private String fileName;
@@ -12,8 +11,9 @@ public class PDFFile {
     private String submitter;
     private Long fileSize;
     private String description;
-    private LocalDateTime generatedTime;
+    private String generatedTime;
 
+    @DynamoDBHashKey
     public String getId() {
         return id;
     }
@@ -62,11 +62,11 @@ public class PDFFile {
         this.description = description;
     }
 
-    public LocalDateTime getGeneratedTime() {
+    public String getGeneratedTime() {
         return generatedTime;
     }
 
-    public void setGeneratedTime(LocalDateTime generatedTime) {
+    public void setGeneratedTime(String generatedTime) {
         this.generatedTime = generatedTime;
     }
 
