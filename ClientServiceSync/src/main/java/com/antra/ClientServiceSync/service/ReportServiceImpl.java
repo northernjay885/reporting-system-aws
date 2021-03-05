@@ -33,10 +33,17 @@ public class ReportServiceImpl implements ReportService {
 
     private final ReportRequestRepo reportRequestRepo;
     private final AmazonS3 s3Client;
+    private final ExcelServiceFeignClient excelServiceFeignClient;
+    private final PDFServiceFeignClient pdfServiceFeignClient;
 
-    public ReportServiceImpl(ReportRequestRepo reportRequestRepo, AmazonS3 s3Client) {
+    public ReportServiceImpl(ReportRequestRepo reportRequestRepo,
+                             AmazonS3 s3Client,
+                             ExcelServiceFeignClient excelServiceFeignClient,
+                             PDFServiceFeignClient pdfServiceFeignClient) {
         this.reportRequestRepo = reportRequestRepo;
         this.s3Client = s3Client;
+        this.excelServiceFeignClient = excelServiceFeignClient;
+        this.pdfServiceFeignClient = pdfServiceFeignClient;
     }
 
     private ReportRequestEntity persistToLocal(ReportRequest request) {
@@ -69,14 +76,13 @@ public class ReportServiceImpl implements ReportService {
     }
 
     private void sendDirectRequests(ReportRequest request) {
-        RestTemplate rs = new RestTemplate();
         ExecutorService executorService = Executors.newFixedThreadPool(2);
         ReentrantLock lock = new ReentrantLock();
 
         Runnable excelTask = () -> {
             ExcelResponse excelResponse = new ExcelResponse();
             try {
-                excelResponse = rs.postForEntity("http://localhost:8888/excel", request, ExcelResponse.class).getBody();
+                excelResponse = excelServiceFeignClient.getExcelServiceResponse(request);
             } catch(Exception e){
                 log.error("Excel Generation Error (Sync) : e", e);
                 excelResponse.setReqId(request.getReqId());
@@ -97,7 +103,7 @@ public class ReportServiceImpl implements ReportService {
         Runnable pdfTask = () -> {
             PDFResponse pdfResponse = new PDFResponse();
             try {
-                pdfResponse = rs.postForEntity("http://localhost:9999/pdf", request, PDFResponse.class).getBody();
+                pdfResponse = pdfServiceFeignClient.getPDFServiceResponse(request);
             } catch(Exception e){
                 log.error("PDF Generation Error (Sync) : e", e);
                 pdfResponse.setReqId(request.getReqId());

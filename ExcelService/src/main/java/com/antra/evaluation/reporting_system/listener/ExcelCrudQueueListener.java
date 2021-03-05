@@ -30,7 +30,11 @@ public class ExcelCrudQueueListener {
             throw new CrudTypeNotFoundException();
         } else if (request.getCrudType().equals("DELETE")) {
             String fileId = request.getExcelFileId();
-            excelService.deleteFile(fileId);
+            if (fileId != null) {
+                excelService.deleteFile(fileId);
+            } else {
+                throw new FileNotFoundException();
+            }
             log.info("File with fileId: {} has been deleted!", fileId);
         }
     }

@@ -30,7 +30,11 @@ public class PdfCrudQueueListener {
             throw new CrudTypeNotFoundException();
         } else if (request.getCrudType().equals("DELETE")) {
             String fileId = request.getPdfFileId();
-            pdfService.deleteFile(fileId);
+            if (fileId != null) {
+                pdfService.deleteFile(fileId);
+            } else {
+                throw new FileNotFoundException();
+            }
             log.info("File with fileId: {} has been deleted!", fileId);
         }
     }
