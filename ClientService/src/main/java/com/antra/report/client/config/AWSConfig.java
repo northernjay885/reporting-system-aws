@@ -1,4 +1,4 @@
-package com.antra.evaluation.reporting_system.config;
+package com.antra.report.client.config;
 
 import com.amazonaws.services.sqs.AmazonSQSAsync;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,5 +38,5 @@ public class AWSConfig {
         return converter;
     }
 
-
 }
+

@@ -79,7 +79,7 @@ public class ExcelServiceImpl implements ExcelService {
             fileInfo.setDescription(request.getDescription());
 
             if(generatedFile.delete()) {
-                log.debug("deleted");
+                log.debug("deleted local files!");
             }
 
         } catch (IOException e) {
@@ -87,7 +87,7 @@ public class ExcelServiceImpl implements ExcelService {
         }
 
         excelRepository.save(fileInfo);
-        log.debug("Excel File Generated : {}", fileInfo);
+        log.info("Excel File Generated : {}", fileInfo);
 
         return fileInfo;
     }

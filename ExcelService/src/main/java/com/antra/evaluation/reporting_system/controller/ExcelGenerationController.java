@@ -39,13 +39,14 @@ public class ExcelGenerationController {
     @PostMapping("/excel")
     @ApiOperation("Generate Excel")
     public ResponseEntity<ExcelResponse> createExcel(@RequestBody @Validated ExcelRequest request) {
-        log.debug("Got Request to Create Single Sheet Excel:{}", request);
+        log.info("Got Request to Create Single Sheet Excel:{}", request);
         ExcelFile fileInfo = excelService.generateFile(request, false);
         ExcelResponse response = new ExcelResponse();
         BeanUtils.copyProperties(fileInfo, response);
         response.setFileDownloadLink(this.generateFileDownloadLink(fileInfo.getFileId()));
         response.setFileLocation(fileInfo.getFileLocation());
         response.setReqId(request.getReqId());
+        response.setFailed(false);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -67,7 +68,10 @@ public class ExcelGenerationController {
         ExcelFile fileInfo = excelService.generateFile(request, true);
         ExcelResponse response = new ExcelResponse();
         BeanUtils.copyProperties(fileInfo, response);
-        response.setFileLocation(this.generateFileDownloadLink(fileInfo.getFileId()));
+        response.setFileDownloadLink(this.generateFileDownloadLink(fileInfo.getFileId()));
+        response.setFileLocation(fileInfo.getFileLocation());
+        response.setReqId(request.getReqId());
+        response.setFailed(false);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -97,12 +101,12 @@ public class ExcelGenerationController {
 
     @DeleteMapping("/excel/{id}")
     public ResponseEntity<ExcelResponse> deleteExcel(@PathVariable String id) throws FileNotFoundException {
-        log.debug("Got Request to Delete File:{}", id);
+        log.info("Got Request to Delete File:{}", id);
         var response = new ExcelResponse();
         ExcelFile fileDeleted = excelService.deleteFile(id);
         BeanUtils.copyProperties(fileDeleted, response);
         response.setFileLocation(this.generateFileDownloadLink(fileDeleted.getFileId()));
-        log.debug("File Deleted:{}", fileDeleted);
+        log.info("File Deleted:{}", fileDeleted);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

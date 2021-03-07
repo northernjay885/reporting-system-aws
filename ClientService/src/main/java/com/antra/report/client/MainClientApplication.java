@@ -21,11 +21,6 @@ import java.util.Collections;
 @EnableFeignClients
 @SpringBootApplication
 public class MainClientApplication {
-    @Bean
-    public QueueMessagingTemplate queueMessagingTemplate(
-            AmazonSQSAsync amazonSQSAsync) {
-        return new QueueMessagingTemplate(amazonSQSAsync);
-    }
 
     public static void main(String[] args) {
         SpringApplication.run(MainClientApplication.class, args);

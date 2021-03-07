@@ -24,7 +24,7 @@ public class ExcelCrudQueueListener {
 
     @SqsListener("${app.aws.crud.excel.queue.name}")
     public void listen(CrudSNSRequest snsRequest) throws CrudTypeNotFoundException, FileNotFoundException {
-        log.info("Get Crud snsRequest: {}", snsRequest);
+        log.info("Got Crud snsRequest: {}", snsRequest);
         CrudRequest request = snsRequest.getCrudRequest();
         if (request.getCrudType() == null) {
             throw new CrudTypeNotFoundException();
