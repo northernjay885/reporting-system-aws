@@ -7,6 +7,7 @@ import com.antra.evaluation.reporting_system.pojo.report.ExcelFile;
 import com.antra.evaluation.reporting_system.service.ExcelService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.aws.messaging.core.QueueMessagingTemplate;
 import org.springframework.cloud.aws.messaging.listener.annotation.SqsListener;
 import org.springframework.stereotype.Component;
@@ -20,13 +21,16 @@ public class ExcelRequestQueueListener {
 
     private final ExcelService excelService;
 
+    @Value("${app.aws.sqs.excel.response.queue}")
+    String excelResponseQueue;
+
     public ExcelRequestQueueListener(QueueMessagingTemplate queueMessagingTemplate, ExcelService excelService) {
         this.queueMessagingTemplate = queueMessagingTemplate;
         this.excelService = excelService;
     }
 
     public void queueListener(ExcelRequest request) {
-        ExcelFile file = null;
+        ExcelFile file;
         ExcelResponse response = new ExcelResponse();
         response.setReqId(request.getReqId());
 
@@ -46,20 +50,14 @@ public class ExcelRequestQueueListener {
         log.info("Replied back: {}", response);
     }
 
-    @SqsListener("excel_task_queue")
+    @SqsListener("${app.aws.sqs.task.queue.name}")
     public void fanoutQueueListener(ExcelSNSRequest request) {
         log.info("Got fanout request: {}", request);
         queueListener(request.getExcelRequest());
     }
 
     private void send(Object message) {
-        queueMessagingTemplate.convertAndSend("Excel_Response_Queue", message);
+        queueMessagingTemplate.convertAndSend(excelResponseQueue, message);
     }
 }
-/**
- * {
- *   "description":"Student Math Course Report",
- *   "headers":["Student #","Name","Class","Score"],
- *   "submitter":"Mrs. York1234"
- * }
- **/
+

@@ -7,6 +7,7 @@ import com.antra.evaluation.reporting_system.pojo.report.PDFFile;
 import com.antra.evaluation.reporting_system.service.PDFService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.aws.messaging.core.QueueMessagingTemplate;
 import org.springframework.cloud.aws.messaging.listener.annotation.SqsListener;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,9 @@ public class PDFRequestQueueListener {
 
     private final PDFService pdfService;
 
+    @Value("${app.aws.sqs.pdf.response.queue}")
+    String pdfResponseQueue;
+
     public PDFRequestQueueListener(QueueMessagingTemplate queueMessagingTemplate, PDFService pdfService) {
         this.queueMessagingTemplate = queueMessagingTemplate;
         this.pdfService = pdfService;
@@ -28,7 +32,7 @@ public class PDFRequestQueueListener {
    // @SqsListener("PDF_Request_Queue")
     public void queueListener(PDFRequest request) {
 //        log.info("Get request: {}", request);
-        PDFFile file = null;
+        PDFFile file;
         PDFResponse response = new PDFResponse();
         response.setReqId(request.getReqId());
 
@@ -48,20 +52,14 @@ public class PDFRequestQueueListener {
         log.info("Replied back: {}", response);
     }
 
-    @SqsListener("pdf_task_queue")
+    @SqsListener("${app.aws.sqs.task.queue.name}")
     public void fanoutQueueListener(PDFSNSRequest request) {
         log.info("Get fanout request: {}", request);
         queueListener(request.getPdfRequest());
     }
 
     private void send(Object message) {
-        queueMessagingTemplate.convertAndSend("PDF_Response_Queue", message);
+        queueMessagingTemplate.convertAndSend(pdfResponseQueue, message);
     }
 }
-/**
- * {
- *   "description":"Student Math Course Report",
- *   "headers":["Student #","Name","Class","Score"],
- *   "submitter":"Mrs. York1234"
- * }
- **/
+

@@ -1,4 +1,4 @@
-package com.antra.evaluation.reporting_system.listener;
+package com.antra.evaluation.reporting_system.controller;
 
 import com.antra.evaluation.reporting_system.pojo.request.PDFRequest;
 import com.antra.evaluation.reporting_system.pojo.response.PDFResponse;
@@ -32,7 +32,7 @@ public class PDFGenerationController {
         log.info("Got request to generate PDF: {}", request);
 
         PDFResponse response = new PDFResponse();
-        PDFFile file = null;
+        PDFFile file;
         response.setReqId(request.getReqId());
 
         try {
