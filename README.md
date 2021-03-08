@@ -1,3 +1,5 @@
+![maven workflow](https://github.com/northernjay885/reporting-system-aws/actions/workflows/maven.yml/badge.svg)
+
 # Antra SEP java evaluation project
 ## 1. Setup the environment and make it run.
  All three projects are Sprintboot application.<br>
