@@ -18,13 +18,13 @@ public class ReportSQSListener {
         this.reportService = reportService;
     }
 
-    @SqsListener("PDF_Response_Queue")
+    @SqsListener("${app.aws.sqs.pdf.response.queue}")
     public void responseQueueListenerPdf(SqsResponse response) {
         log.info("Get response from sqs : {}", response);
         reportService.updateAsyncPDFReport(response);
     }
 
-    @SqsListener("Excel_Response_Queue")
+    @SqsListener("${app.aws.sqs.excel.response.queue}")
     public void responseQueueListenerExcel(SqsResponse response) {
         log.info("Get response from sqs : {}", response);
         reportService.updateAsyncExcelReport(response);

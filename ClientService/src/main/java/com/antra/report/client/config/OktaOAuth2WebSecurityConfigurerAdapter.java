@@ -9,8 +9,9 @@ public class OktaOAuth2WebSecurityConfigurerAdapter extends WebSecurityConfigure
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                // allow antonymous access to the root page
-//                .antMatchers("/").permitAll()
+                // allow anonymous access to the actuator page
+                .antMatchers("/actuator/**").
+                permitAll()
                 // all other requests
                 .anyRequest().authenticated()
 
