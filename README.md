@@ -2,8 +2,8 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/0cc5df1a96534fd6ab10d1a192ff8974)](https://www.codacy.com/gh/northernjay885/reporting-system-aws/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=northernjay885/reporting-system-aws&amp;utm_campaign=Badge_Grade)
 
 # Report Generating System on AWS
- This project is used mainly for demonstrating purpose.
-## 1. Setup the environment and make it run.
+ This project is used mainly for demonstrating purpose. It can generate both excel and pdf format reports from a json file through a website. In the beginning, the user would be asked to authenticate himself. After logging in, the user can perform operations like creating the reports, downloading from AWS S3 bucket and deleting previous records through the website.
+## Getting Started
  All three projects are Sprintboot application.<br>
 
  Need to setup AWS SNS/SQS/S3 in order to use the async API.(Videos in LMS)<br>
