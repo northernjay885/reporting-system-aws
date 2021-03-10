@@ -31,4 +31,9 @@ RUN apt-get install -y --no-install-recommends fontconfig ttf-mscorefonts-instal
 RUN fc-cache -f -v
 
 
-ENTRYPOINT ["java", "-Djava.security.egd=file:/dev./urandom", "org.springframework.boot.loader.JarLauncher"]
+## Add the wait script to the image
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.8.0/wait /wait
+RUN chmod +x /wait
+## Launch the wait tool and then your application
+
+ENTRYPOINT ["/bin/sh", "-c", "/wait && java -Djava.security.egd=file:/dev./urandom org.springframework.boot.loader.JarLauncher"]
