@@ -4,13 +4,19 @@
 # Report Generating System on AWS
  This project is used mainly for demonstrating purpose. It can generate both excel and pdf format reports from a json file through a website. In the beginning, the user would be asked to authenticate himself. After logging in, the user can perform operations like creating the reports, downloading from AWS S3 bucket and deleting previous records through the website.
 ## Getting Started
- All three projects are Sprintboot application.<br>
+ The project can be reached at an [EC2 instance](http://ec2-52-90-176-41.compute-1.amazonaws.com:8080).<br>
 
- Need to setup AWS SNS/SQS/S3 in order to use the async API.(Videos in LMS)<br>
-
- Make sure to update your <i>application.properties</i> file with your AWS IAM account secrets and region.(Videos in LMS)
-
- AWS Lambda(Sending email) is optional. Code is in [sendEmailCode.py](./lambda/sendEmailCode.py)
+ The test user can be used to access the administrator console. <br>
+ 
+ Account Id:
+ ```
+ JoeSnow582@gmail.com
+ ```
+ Password:
+ ```
+ 78MmaoY6g5N#
+ ```
+ 
 
 ## 2. Understand the structure and details
 Look at the [ReportingSystemArchitecture.pdf](./ReportingSystemArchitecture.pdf)
