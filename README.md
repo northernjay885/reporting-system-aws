@@ -1,4 +1,5 @@
 ![maven workflow](https://github.com/northernjay885/reporting-system-aws/actions/workflows/maven.yml/badge.svg)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/0cc5df1a96534fd6ab10d1a192ff8974)](https://www.codacy.com/gh/northernjay885/reporting-system-aws/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=northernjay885/reporting-system-aws&amp;utm_campaign=Badge_Grade)
 
 # Antra SEP java evaluation project
 ## 1. Setup the environment and make it run.
