@@ -1,6 +1,9 @@
 ![maven workflow](https://github.com/northernjay885/reporting-system-aws/actions/workflows/maven.yml/badge.svg)
 
 # Antra SEP java evaluation project
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/cb4ad02f9397438882d25042921a4bb0)](https://app.codacy.com/gh/northernjay885/reporting-system-aws?utm_source=github.com&utm_medium=referral&utm_content=northernjay885/reporting-system-aws&utm_campaign=Badge_Grade_Settings)
+
 ## 1. Setup the environment and make it run.
  All three projects are Sprintboot application.<br>
 
