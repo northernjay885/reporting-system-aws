@@ -46,6 +46,10 @@ The below is a demo to show the features of the application.
 
 ## Notes
 1. The yaml file has not been committed to github, because it contains many environment variables and AWS Secret.
+2. All the images can be pull from my docker repository. For example:
+```
+docker pull northernjay/clientservice:latest
+```
 
 ## License
 The content of this project itself is licensed under the [Creative Commons Attribution 3.0 Unported license](https://creativecommons.org/licenses/by/3.0/), and the underlying source code used to format and display that content is licensed under the [MIT license](LICENSE.md).
