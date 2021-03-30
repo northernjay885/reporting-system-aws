@@ -35,6 +35,8 @@ public class ReportServiceImpl implements ReportService {
     private final AmazonS3 s3Client;
     private final ExcelServiceFeignClient excelServiceFeignClient;
     private final PDFServiceFeignClient pdfServiceFeignClient;
+    ExecutorService executorService = Executors.newFixedThreadPool(2);
+    ReentrantLock lock = new ReentrantLock();
 
     public ReportServiceImpl(ReportRequestRepo reportRequestRepo,
                              AmazonS3 s3Client,
@@ -76,8 +78,6 @@ public class ReportServiceImpl implements ReportService {
     }
 
     private void sendDirectRequests(ReportRequest request) {
-        ExecutorService executorService = Executors.newFixedThreadPool(2);
-        ReentrantLock lock = new ReentrantLock();
 
         Runnable excelTask = () -> {
             ExcelResponse excelResponse = new ExcelResponse();
@@ -121,8 +121,8 @@ public class ReportServiceImpl implements ReportService {
             }
         };
 
-        executorService.submit(excelTask);
-        executorService.submit(pdfTask);
+        executorService.execute(excelTask);
+        executorService.execute(pdfTask);
         executorService.shutdown();
     }
 
