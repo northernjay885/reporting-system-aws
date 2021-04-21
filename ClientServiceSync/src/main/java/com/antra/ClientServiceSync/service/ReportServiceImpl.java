@@ -19,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.InputStream;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -195,4 +196,5 @@ public class ReportServiceImpl implements ReportService {
         }
         return null;
     }
+    HashMap
 }
